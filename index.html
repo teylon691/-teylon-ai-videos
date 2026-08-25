@@ -3,28 +3,132 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha IA de Vídeos</title>
+  <title>Teylon AI Vídeos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      background: #0b0b12;
+      color: white;
+      display: flex;
+      justify-content: center;
+      padding: 30px 15px;
+    }
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 36px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+    .box {
+      background: #15151f;
+      border: 1px solid #29293a;
+      border-radius: 18px;
+      padding: 25px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 1px solid #363648;
+      border-radius: 12px;
+      background: #0e0e16;
+      color: white;
+      padding: 15px;
+      font-size: 16px;
+      outline: none;
+    }
+    textarea:focus {
+      border-color: #7c3aed;
+    }
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #7c3aed;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #6d28d9;
+    }
+    #resultado {
+      margin-top: 25px;
+      text-align: center;
+      color: #ccc;
+    }
+    video {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 14px;
+      display: none;
+    }
+    .aviso {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h1>🎬 Minha IA de Vídeos</h1>
-  <p>Crie seus vídeos com inteligência artificial.</p>
-  <input
-    type="text"
-    id="prompt"
-    placeholder="Digite o vídeo que você quer criar..."
-  >
-  <button onclick="criarVideo()">Criar vídeo</button>
-  <p id="resultado"></p>
+  <div class="container">
+    <h1>🎬 Teylon AI</h1>
+    <p class="subtitle">
+      Crie vídeos usando inteligência artificial
+    </p>
+    <div class="box">
+      <label for="prompt">
+        Descreva o vídeo que você quer criar:
+      </label>
+      <textarea
+        id="prompt"
+        placeholder="Exemplo: Um carro esportivo vermelho correndo por uma cidade futurista à noite, estilo cinematográfico, 4K..."
+      ></textarea>
+      <button onclick="criarVideo()">
+        ✨ Criar vídeo
+      </button>
+      <div id="resultado"></div>
+      <video id="video" controls></video>
+      <p class="aviso">
+        A geração de vídeo será conectada na próxima etapa.
+      </p>
+    </div>
+  </div>
   <script>
     function criarVideo() {
-      const prompt = document.getElementById("prompt").value;
+      const prompt = document.getElementById("prompt").value.trim();
+      const resultado = document.getElementById("resultado");
       if (!prompt) {
-        document.getElementById("resultado").innerText =
-          "Digite uma ideia para o vídeo.";
+        resultado.innerText =
+          "⚠️ Primeiro descreva o vídeo que você quer criar.";
         return;
       }
-      document.getElementById("resultado").innerText =
-        "🎬 Sua ideia foi recebida: " + prompt;
+      resultado.innerText =
+        "⏳ Sua ideia foi recebida! A geração de vídeo será conectada na próxima etapa.";
+      console.log("Prompt:", prompt);
     }
   </script>
 </body>
