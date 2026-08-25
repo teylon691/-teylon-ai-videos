@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha IA de Vídeos</title>
+</head>
+<body>
+  <h1>🎬 Minha IA de Vídeos</h1>
+  <p>Crie seus vídeos com inteligência artificial.</p>
+  <input
+    type="text"
+    id="prompt"
+    placeholder="Digite o vídeo que você quer criar..."
+  >
+  <button onclick="criarVideo()">Criar vídeo</button>
+  <p id="resultado"></p>
+  <script>
+    function criarVideo() {
+      const prompt = document.getElementById("prompt").value;
+      if (!prompt) {
+        document.getElementById("resultado").innerText =
+          "Digite uma ideia para o vídeo.";
+        return;
+      }
+      document.getElementById("resultado").innerText =
+        "🎬 Sua ideia foi recebida: " + prompt;
+    }
+  </script>
+</body>
+</html>
