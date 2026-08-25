@@ -66,6 +66,10 @@
       outline: none;
     }
 
+    textarea:focus {
+      border-color: #7c3aed;
+    }
+
     button {
       width: 100%;
       margin-top: 15px;
@@ -77,6 +81,10 @@
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
+    }
+
+    button:hover {
+      background: #6d28d9;
     }
 
     #resultado {
@@ -121,8 +129,8 @@
 
   <script>
 
-    // COLOQUE A URL DO SEU WORKER ENTRE AS ASPAS ABAIXO
-    const WORKER_URL = "https://dark-snow-bac9.gteylon664.workers.dev";
+    const WORKER_URL =
+      "https://dark-snow-bac9.gteylon664.workers.dev";
 
     async function criarVideo() {
 
@@ -157,7 +165,17 @@
           })
         });
 
-        const dados = await resposta.json();
+        const texto = await resposta.text();
+
+        let dados;
+
+        try {
+          dados = JSON.parse(texto);
+        } catch {
+          throw new Error(
+            "O servidor respondeu algo que não é JSON."
+          );
+        }
 
         if (!resposta.ok) {
           throw new Error(
@@ -166,14 +184,213 @@
         }
 
         resultado.innerText =
-          "✅ Servidor respondeu:\n\n" +
-          dados.mensagem;
+          "✅ " + dados.mensagem;
 
       } catch (erro) {
 
         resultado.innerText =
-          "❌ Não foi possível conectar ao servidor.\n\n" +
-          erro.message;
+          "❌ Erro: " + erro.message;
+
+      }
+    }
+
+  </script>
+
+</body>
+</html>
+```
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teylon AI Vídeos</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0b0b12;
+      color: white;
+      display: flex;
+      justify-content: center;
+      padding: 30px 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 36px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    .box {
+      background: #15151f;
+      border: 1px solid #29293a;
+      border-radius: 18px;
+      padding: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 1px solid #363648;
+      border-radius: 12px;
+      background: #0e0e16;
+      color: white;
+      padding: 15px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #7c3aed;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #7c3aed;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #6d28d9;
+    }
+
+    #resultado {
+      margin-top: 25px;
+      text-align: center;
+      color: #ccc;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🎬 Teylon AI</h1>
+
+    <p class="subtitle">
+      Crie seus vídeos com inteligência artificial
+    </p>
+
+    <div class="box">
+
+      <label for="prompt">
+        Descreva o vídeo que você quer criar:
+      </label>
+
+      <textarea
+        id="prompt"
+        placeholder="Exemplo: Um carro esportivo vermelho correndo em uma cidade futurista à noite..."
+      ></textarea>
+
+      <button onclick="criarVideo()">
+        ✨ Criar vídeo
+      </button>
+
+      <div id="resultado"></div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const WORKER_URL =
+      "https://dark-snow-bac9.gteylon664.workers.dev";
+
+    async function criarVideo() {
+
+      const prompt = document
+        .getElementById("prompt")
+        .value
+        .trim();
+
+      const resultado =
+        document.getElementById("resultado");
+
+      if (!prompt) {
+        resultado.innerText =
+          "⚠️ Digite uma descrição para o vídeo.";
+        return;
+      }
+
+      resultado.innerText =
+        "⏳ Enviando sua ideia para a Teylon AI...";
+
+      try {
+
+        const resposta = await fetch(WORKER_URL, {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            prompt: prompt
+          })
+        });
+
+        const texto = await resposta.text();
+
+        let dados;
+
+        try {
+          dados = JSON.parse(texto);
+        } catch {
+          throw new Error(
+            "O servidor respondeu algo que não é JSON."
+          );
+        }
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.mensagem || "Erro no servidor."
+          );
+        }
+
+        resultado.innerText =
+          "✅ " + dados.mensagem;
+
+      } catch (erro) {
+
+        resultado.innerText =
+          "❌ Erro: " + erro.message;
 
       }
     }
