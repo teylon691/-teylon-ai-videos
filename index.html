@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teylon AI Vídeos</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -11,6 +13,7 @@
       padding: 0;
       font-family: Arial, sans-serif;
     }
+
     body {
       min-height: 100vh;
       background: #0b0b12;
@@ -19,31 +22,37 @@
       justify-content: center;
       padding: 30px 15px;
     }
+
     .container {
       width: 100%;
       max-width: 700px;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 10px;
       font-size: 36px;
     }
+
     .subtitle {
       text-align: center;
       color: #aaa;
       margin-bottom: 30px;
     }
+
     .box {
       background: #15151f;
       border: 1px solid #29293a;
       border-radius: 18px;
       padding: 25px;
     }
+
     label {
       display: block;
       margin-bottom: 10px;
       font-weight: bold;
     }
+
     textarea {
       width: 100%;
       min-height: 150px;
@@ -56,9 +65,7 @@
       font-size: 16px;
       outline: none;
     }
-    textarea:focus {
-      border-color: #7c3aed;
-    }
+
     button {
       width: 100%;
       margin-top: 15px;
@@ -71,65 +78,108 @@
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background: #6d28d9;
-    }
+
     #resultado {
       margin-top: 25px;
       text-align: center;
       color: #ccc;
-    }
-    video {
-      width: 100%;
-      margin-top: 20px;
-      border-radius: 14px;
-      display: none;
-    }
-    .aviso {
-      margin-top: 20px;
-      font-size: 13px;
-      color: #888;
-      text-align: center;
+      white-space: pre-wrap;
     }
   </style>
 </head>
+
 <body>
+
   <div class="container">
+
     <h1>🎬 Teylon AI</h1>
+
     <p class="subtitle">
-      Crie vídeos usando inteligência artificial
+      Crie seus vídeos com inteligência artificial
     </p>
+
     <div class="box">
+
       <label for="prompt">
         Descreva o vídeo que você quer criar:
       </label>
+
       <textarea
         id="prompt"
-        placeholder="Exemplo: Um carro esportivo vermelho correndo por uma cidade futurista à noite, estilo cinematográfico, 4K..."
+        placeholder="Exemplo: Um carro esportivo vermelho correndo em uma cidade futurista à noite..."
       ></textarea>
+
       <button onclick="criarVideo()">
         ✨ Criar vídeo
       </button>
+
       <div id="resultado"></div>
-      <video id="video" controls></video>
-      <p class="aviso">
-        A geração de vídeo será conectada na próxima etapa.
-      </p>
+
     </div>
+
   </div>
+
   <script>
-    function criarVideo() {
-      const prompt = document.getElementById("prompt").value.trim();
-      const resultado = document.getElementById("resultado");
+
+    // COLOQUE A URL DO SEU WORKER ENTRE AS ASPAS ABAIXO
+    const WORKER_URL = "https://dark-snow-bac9.gteylon664.workers.dev";
+
+    async function criarVideo() {
+
+      const prompt = document
+        .getElementById("prompt")
+        .value
+        .trim();
+
+      const resultado =
+        document.getElementById("resultado");
+
       if (!prompt) {
         resultado.innerText =
-          "⚠️ Primeiro descreva o vídeo que você quer criar.";
+          "⚠️ Digite uma descrição para o vídeo.";
         return;
       }
+
       resultado.innerText =
-        "⏳ Sua ideia foi recebida! A geração de vídeo será conectada na próxima etapa.";
-      console.log("Prompt:", prompt);
+        "⏳ Enviando sua ideia para a Teylon AI...";
+
+      try {
+
+        const resposta = await fetch(WORKER_URL, {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            prompt: prompt
+          })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.mensagem || "Erro no servidor."
+          );
+        }
+
+        resultado.innerText =
+          "✅ Servidor respondeu:\n\n" +
+          dados.mensagem;
+
+      } catch (erro) {
+
+        resultado.innerText =
+          "❌ Não foi possível conectar ao servidor.\n\n" +
+          erro.message;
+
+      }
     }
+
   </script>
+
 </body>
 </html>
+```
